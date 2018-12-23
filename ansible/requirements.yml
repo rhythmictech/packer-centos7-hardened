@@ -1,0 +1,5 @@
+---
+- src: git@github.com:rhythmictech/ansible-centos7-cis.git
+  scm: git
+  version: devel
+  name: ansible-centos7-cis

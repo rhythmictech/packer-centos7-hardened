@@ -35,8 +35,18 @@
         "scripts/04-network.sh",
         "scripts/05-cloud-init.sh",
         "scripts/06-grub.sh",
-        "scripts/07-cleanup.sh"
+        "scripts/07-cfninit.sh",
+        "scripts/08-cleanup.sh"
       ]
+    },
+    {
+        "type": "ansible-local",
+        "playbook_file": "ansible/playbook.yml",
+        "role_paths": [
+            "ansible/roles"
+        ],
+        "playbook_dir": "ansible",
+        "galaxy_file": "ansible/requirements.yml"
     }
   ],
 
@@ -64,7 +74,7 @@
         "echo 'RPM initial setup'",
         "rpm --root={{.MountPath}} --initdb",
         "echo 'Install base OS release RPM to lay down the basics in chroot'",
-        "rpm --root={{.MountPath}} -ivh http://{{user `repo_baseurl`}}/{{user `os_name`}}/{{user `os_version`}}/os/x86_64/Packages/{{user `rpm_release_file`}}",
+        "rpm --nodeps --root={{.MountPath}} -ivh http://{{user `repo_baseurl`}}/{{user `os_name`}}/{{user `os_version`}}/os/x86_64/Packages/{{user `rpm_release_file`}}",
         "echo 'Make sure yum and deltarpm are installed'",
         "yum --installroot={{.MountPath}} -y install yum deltarpm",
         "echo 'Write out variable for use by provisioning scripts'",

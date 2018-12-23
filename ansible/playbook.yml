@@ -1,0 +1,9 @@
+
+---
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  become: yes
+  roles:
+    - base
+    - ansible-centos7-cis
