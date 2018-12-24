@@ -2,10 +2,10 @@
 #
 
 # Install basic set of packages
-yum -y install @core epel-release authconfig audit deltarpm sudo chrony
+yum -y install @core epel-release authconfig audit deltarpm sudo chrony \
   cloud-init cloud-utils-growpart dracut-config-generic dracut-norescue \
-  firewalld grub2 kernel nfs-utils rsync tar yum-utils tuned dnsmasq gnutls \
-  gdisk libselinux-python libyaml lsof lvm2 m2crypto libmcrypt \
+  firewalld git grub2 kernel nfs-utils rsync tar yum-utils tuned dnsmasq \
+  gdisk gnutls libselinux-python libyaml lsof lvm2 m2crypto libmcrypt \
   python-backports python-backports-ssl_match_hostname python-chardet \
   python-crypto python-jinja2 python-msgpack python-ordereddict \
   python-requests python-six python-setuptools python-urllib3 python-zmq \
@@ -23,3 +23,8 @@ yum -y remove hwdata linux-firmware dracut-config-rescue NetworkManager \
 
 # Patch up to latest minor release if needed
 yum update -y
+
+# pip comes from epel, so this needs to be installed after that.
+yum install -y python-pip
+
+pip install ansible

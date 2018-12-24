@@ -35,8 +35,7 @@
         "scripts/04-network.sh",
         "scripts/05-cloud-init.sh",
         "scripts/06-grub.sh",
-        "scripts/07-cfninit.sh",
-        "scripts/08-cleanup.sh"
+        "scripts/07-cfninit.sh"
       ]
     },
     {
@@ -47,6 +46,15 @@
         ],
         "playbook_dir": "ansible",
         "galaxy_file": "ansible/requirements.yml"
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "FS_TYPE={{user `fs_type`}}"
+      ],
+      "scripts": [
+        "scripts/08-cleanup.sh"
+      ]
     }
   ],
 

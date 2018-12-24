@@ -31,6 +31,12 @@ find /root /home -name 'authorized_keys' -exec truncate -s 0 {} \;
 # Pause so setfiles can finish before moving on to next action
 sleep 30s
 
+umount /dev/shm || true
+
+sleep 3s
+
+umount /dev || true
+
 # Disk clean up final
 dd if=/dev/zero of=/zeros bs=1M
 rm -f /zeros
