@@ -9,33 +9,62 @@
     "root_device_size": "8",
     "fs_type": "xfs",
     "repo_baseurl": "mirror.centos.org",
-    "rpm_release_file": "centos-release-7-6.1810.2.el7.centos.x86_64.rpm"
+    "rpm_release_file": "centos-release-7-6.1810.2.el7.centos.x86_64.rpm",
+    "iso_checksum": "c0c1a05d3d74fb093c6232003da4b22b0680f59d3b2fa2cb7da736bc40b3f2c5",
+    "iso_checksum_type": "sha256",
+    "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
+    "ks_path": "centos-6.7/ks.cfg",
+    "metadata": "floppy/dummy_metadata.json",
+    "mirror": "http://mirrors.kernel.org/centos",
+    "mirror_directory": "6.7/isos/x86_64"
   },
 
   "provisioners": [
     {
       "type": "file",
+      "only": ["amazon-chroot"],
       "source": "files/10-growpart.cfg",
       "destination": "/tmp/10-growpart.cfg"
     },
     {
       "type": "file",
+      "only": ["amazon-chroot"],
       "source": "files/cloud.cfg",
       "destination": "/tmp/cloud.cfg"
     },
     {
+      "type": "file",
+      "source": "local/trusted-certs",
+      "destination": "/tmp"
+    },
+    {
       "type": "shell",
+      "only": ["amazon-chroot"],
       "environment_vars": [
         "FS_TYPE={{user `fs_type`}}"
       ],
       "scripts": [
-        "scripts/01-packages.sh",
-        "scripts/02-config.sh",
-        "scripts/03-services.sh",
-        "scripts/04-network.sh",
-        "scripts/05-cloud-init.sh",
-        "scripts/06-grub.sh",
-        "scripts/07-cfninit.sh"
+        "scripts/amazon-chroot/01-packages.sh",
+        "scripts/amazon-chroot/02-config.sh",
+        "scripts/amazon-chroot/03-services.sh",
+        "scripts/amazon-chroot/04-network.sh",
+        "scripts/amazon-chroot/05-cloud-init.sh",
+        "scripts/amazon-chroot/06-grub.sh",
+        "scripts/amazon-chroot/07-cfninit.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "only": ["vmware-iso"],
+      "environment_vars": [
+        "FS_TYPE={{user `fs_type`}}"
+      ],
+      "scripts": [
+        "scripts/vmware-iso/01-packages.sh",
+        "scripts/vmware-iso/02-config.sh",
+        "scripts/vmware-iso/03-services.sh",
+        "scripts/vmware-iso/04-network.sh",
+        "scripts/vmware-iso/06-grub.sh"
       ]
     },
     {
@@ -104,6 +133,31 @@
         "os": "{{user `os_name`}}",
         "version": "{{user `os_version`}}"
       }
+    },
+    {
+      "type": "vmware-iso",
+      "remote_host": "",
+      "remote_username": "root",
+      "remote_password": "",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vmware_ks_path`}}<enter><wait>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": 10240,
+      "guest_os_type": "rhel7-64",
+      "headless": "true",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_urls": [
+        "iso/CentOS-7.6-x86_64-bin-DVD1.iso",
+        "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}"
+      ],
+      "output_directory": "packer-{{user `template`}}-vmware",
+      "shutdown_command": "/sbin/halt -h -p",
+      "ssh_username": "root",
+      "ssh_password": "",
+      "vm_name": "{{ user `template` }}"
     }
   ]
 }

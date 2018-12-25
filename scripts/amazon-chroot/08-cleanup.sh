@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 #Remove temp files
-rm -f /tmp/env_vars
+rm -f /tmp/env_vars /tmp/packer-provisioner-ansible-local
 
 # Clean YUM
 yum history new

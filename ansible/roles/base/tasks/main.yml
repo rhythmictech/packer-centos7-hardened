@@ -1,1 +1,23 @@
 ---
+
+- name: check if dynamic CA configuration is enabled
+  command: update-ca-trust check
+  register: cmd_result
+  changed_when: False
+
+- name: enable dynamic CA configuration
+  command: update-ca-trust force-enable
+  when: cmd_result.stdout.find('DISABLED') != -1
+
+- name: place trusted certificates in trust anchors
+  copy:
+    source: "{{ item }}"
+    dest: /etc/pki/ca-trust/source/anchors/
+    owner: root
+    group: root
+    mode: 0644
+  with_fileglob:
+    - "/tmp/trusted-certs/*.pem"
+
+- name: extract the CA certificate(s)
+  command: update-ca-trust extract
