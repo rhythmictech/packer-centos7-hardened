@@ -4,7 +4,7 @@
 # Install basic set of packages
 yum -y install @core epel-release authconfig audit deltarpm sudo chrony \
   cloud-init cloud-utils-growpart dracut-config-generic dracut-norescue \
-  git grub2 kernel nfs-utils rsync tar yum-utils tuned dnsmasq \
+  firewalld git grub2 kernel nfs-utils rsync tar yum-utils tuned dnsmasq \
   gdisk gnutls libselinux-python libyaml lsof lvm2 m2crypto libmcrypt \
   python-backports python-backports-ssl_match_hostname python-chardet \
   python-crypto python-jinja2 python-msgpack python-ordereddict \
